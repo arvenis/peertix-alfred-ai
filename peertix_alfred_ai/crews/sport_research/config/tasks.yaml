@@ -1,0 +1,7 @@
+sport_research_task:
+  description: >
+    Find relevant information for {topic}.
+    Gather previous matches, future matches, current standings and relevant statistics.
+  expected_output: >
+    Short summary of the gathered information.
+  agent: sport_research_agent

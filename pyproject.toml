@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "peertix-alfred-ai"
+version = "0.1.0"
+description = ""
+authors = ["Medveczky Krisztián <krisz.medveczky@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<=3.13"
+crewai = "^0.76.2"
+crewai-tools = "^0.13.2"
+
+
+[tool.poetry.scripts]
+crew = "peertix_alfred_ai.main:main"
+artist-research = "peertix_alfred_ai.main:run_artist_research_crew"
+sport-research = "peertix_alfred_ai.main:run_sport_research_crew"
+topic-classifier = "peertix_alfred_ai.main:run_topic_classifier_crew"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

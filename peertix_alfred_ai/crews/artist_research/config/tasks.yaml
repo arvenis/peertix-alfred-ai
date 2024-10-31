@@ -1,0 +1,13 @@
+artist_identifying_task:
+  description: >
+    Retrieve the name of the artist from {event_name} event.
+  expected_output: >
+    The name of the artist.
+  agent: artist_identifying_agent
+
+artist_research_task:
+  description: >
+    Retrieve the followers and popularity for the artist using Spotify API.
+  expected_output: >
+    A summary of the artist's Spotify stats, including followers and popularity.
+  agent: artist_research_agent

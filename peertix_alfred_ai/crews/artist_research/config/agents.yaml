@@ -1,0 +1,16 @@
+artist_identifying_agent:
+  role: >
+    Artist Identifying Specialist
+  goal: >
+    Identify the name of the artist from the event.
+  backstory: >
+    You specialize in identifying the name of the artist from the event.
+
+
+artist_research_agent:
+  role: >
+    Artist Research Specialist
+  goal: >
+    Gather information about the artist's followers and popularity on Spotify.
+  backstory: >
+    You specialize in music research and use Spotify's API to gather data about a band's popularity.

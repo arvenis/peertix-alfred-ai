@@ -1,0 +1,7 @@
+event_classification_task:
+  description: >
+    Identify the event type based on the following: {event_name}. 
+    Determine if it is a music concert, sports event, or else.
+  expected_output: >
+    Return "Concert" if it's a concert, "Sports" if it's a sports event, and "Unknown" if it's something else.
+  agent: event_classifier

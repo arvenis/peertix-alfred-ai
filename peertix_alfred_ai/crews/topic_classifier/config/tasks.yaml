@@ -1,0 +1,8 @@
+topic_classification_task:
+  description: >
+    Identify the profession of {topic}. 
+    Determine if it is a sports team, musician or something else.
+  expected_output: >
+    Return "Sport" if it's an athlete or sports team, "Musician" if they make music, and "Unknown" if it's something else.
+    You should only return one of these three options, and no more.
+  agent: topic_classifier

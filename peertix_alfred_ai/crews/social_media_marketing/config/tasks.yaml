@@ -1,0 +1,49 @@
+market_and_product_analyssis_task:
+  description: >
+    Conduct a thorough analysis of the following product descrition: {product_desc}.
+    
+    Focus on identifying unique features, benefits, and the overall narrative presented and main pillars. Identify market positioning and areas for engagement.
+  expected_output: >
+    Your final report should clearly articulate the product's key selling points, its market appeal, ideal customer profile, and suggested content themes. Emphasize the aspects that make the product stand out.
+    
+    Keep in mind, attention to detail is crucial for a comprehensive analysis. It's currenlty 2024.
+  agent: lead_market_analyst_agent
+
+competitor_researh_and_trend_identification_task:
+  description: >
+    Analyze top competitors of the following product: {product_desc}. Identify strategies, topics and trends, customer engagement, their community, especially those resonating on social media.
+  expected_output: >
+    A detailed comparison report with insights on what is trending and effective in competitor posts, focusing on customer engagement strategies.
+  agent: trend_analyst_agent
+
+social_media_content_creation_task:
+  description: >
+    Develop engaging Instagram post drafts, including captions and detailed visual concept descriptions, that align with the apps unique brand and appeal to event-goers.
+
+    The post should be intriguing captivating, concise, trendy with GenZ, and aligned with the product marketing strategy pillars. The post could be even 4 sentences long.
+    
+    Focus on creating a message that resonates with the product target audience and highlights the topics around the product's unique selling points. You must not make sales post since the product is not yet launch, talk about the problems it aims to solve. If you can, do not even mention the product directly, only indirectly. An example instagram post could look like that: A "How was the concert?" - asks a friend, who couldn't attend. Just imagine if there was a platform where you could share and rate your experience for all your buddies to see. Share setlists, photos, and memories in a like-minded community. PeerTix is building that platform. Let's amplify the concert experience together! What was your latest concert experience like? Out of five? . Another example could be: It is so hard to find genuine new faces in music, even with todays heated social media and other viral platforms. Smaller artists, or others from the same genre having a hard time doing their discovery, a platform that behaves like a market maker between the smaller artists and the genuinely interested people could do the trick. The focus should be around the features, the problems, that the product has answers, without directly mentioning or recommending the product. It should not feel like a sale's pitch!
+    
+    Your post drafts must be attention-grabbing and should encourage viewers to join the product's community take action, whether it's visiting the website, following on social media, or learning more about the product.
+  expected_output: >
+    10 high-quality post drafts formatted in markdown, each tailored for a specific product pillar(e.g. Community, Convenience, discovery) and or event type (e.g., concerts, sports, theater) and optimized for engagement.
+  agent: social_media_content_creator_agent
+
+keyword_and_hashtag_research_task:
+  description: >
+    Identify relevant keywords, trending hashtags, and audience-relevant terms to boost visibility. Provide insights on keyword placement.
+  expected_output: >
+    A list of prioritized keywords and hashtags with explanations for their selection.
+  agent: trend_analyst_agent
+
+
+# Review the visual descriptions you got from the Social Media Content Creator. Make sure it's the best possible and aligned with the product's goals, review, approve, ask clarifying question or delegate follow up work if necessary to make decisions When delegating work send the full draft as part of the information.
+content_review_and_strategic_oversight_task:
+  description: >
+    Oversee all content drafts, ensuring alignment with the brand’s goals and are not offensive to anybody. Provide constructive feedback and, if needed, delegate additional tasks.
+
+    This is the detailed description of the product you are working with: {product_desc}.
+    Be aware, that the product is not available yet, talk about the problems it aims to solve. Instead of saying things like dowload today, marketing the idea, the vision it aims to solve.
+  expected_output: >
+    Approved 10 high-quality post drafts formatted in markdown, each tailored for a specific product pillar(e.g. Community, Convenience, discovery) and or event type (e.g., concerts, sports, theater) and optimized for engagement. Any revisions clearly documented.
+  agent: chief_marketing_strategist_agent

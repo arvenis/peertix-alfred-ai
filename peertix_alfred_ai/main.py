@@ -5,6 +5,7 @@ from peertix_alfred_ai.crews import (
     ArtistResearchCrew,
     TopicClassifierCrew,
     SportResearchCrew,
+    SocialMediaMarketingCrew,
 )
 
 
@@ -42,4 +43,9 @@ def run_topic_classifier_crew():
 def run_sport_research_crew():
     topic = "FC Barcelona"
     result: CrewOutput = SportResearchCrew().crew().kickoff(inputs={"topic": topic})
+    print(result)
+
+def run_instagram_research_crew():
+    product_desc = ''''''
+    result: CrewOutput = SocialMediaMarketingCrew().crew().kickoff(inputs={"product_desc": product_desc})
     print(result)

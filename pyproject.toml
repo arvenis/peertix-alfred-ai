@@ -14,6 +14,7 @@ crewai-tools = "^0.13.2"
 [tool.poetry.scripts]
 crew = "peertix_alfred_ai.main:main"
 artist-research = "peertix_alfred_ai.main:run_artist_research_crew"
+marketing-research = "peertix_alfred_ai.main:run_instagram_research_crew"
 sport-research = "peertix_alfred_ai.main:run_sport_research_crew"
 topic-classifier = "peertix_alfred_ai.main:run_topic_classifier_crew"
 

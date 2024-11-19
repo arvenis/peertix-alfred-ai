@@ -1,0 +1,1630 @@
+openapi: 3.1.0
+info:
+  title: PT DTS - Angus Gateway APPlication REST API definition
+  version: 0.6.1
+servers:
+  - url: https://angus-app-gateway.dev.peertix.net
+    description: Development server (uses dev data)
+  - url: http://localhost:3888
+    description: Local development server
+security:
+  - bearerAuth: []
+paths:
+  /maintenance/healthcheck:
+    get:
+      x-angus-config:
+        - getVersion
+      x-angus-custom-handler: maintenance/healthcheck
+      tags:
+        - maintenance
+        - working
+      responses:
+        '200':
+          description: Status of the fabric system. Info about the gateway and installed chaincodes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResHealthcheck'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /ticket:
+    post:
+      x-angus-config:
+        - addTicket
+        - getEvent
+      x-angus-custom-handler: ticket/add-ticket
+      tags:
+        - ticket
+        - create
+        - working
+      summary: Create a Ticket document
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqCreateTicket'
+      responses:
+        '200':
+          description: Ticket creation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResUpdateTicket'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+    get:
+      x-angus-config:
+        - getTicket
+      tags:
+        - ticket
+        - working
+      summary: Query a single ticket with its internal id
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+        - name: id
+          required: true
+          $ref: '#/components/parameters/CommonQueryId'
+      responses:
+        '200':
+          description: The requested ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResTicket'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /ticket/get-my-tickets:
+    get:
+      x-angus-config:
+        - getMyTicketList
+      tags:
+        - ticket
+        - list
+        - mine
+        - working
+      summary: Return my tickets as a list with resolved event and programs
+      responses:
+        '200':
+          description: My tickets in a list with resolved event and program fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mAppResTicketList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /event:
+    get:
+      x-angus-config:
+        - getEvent
+      tags:
+        - event
+        - working
+      summary: Query a single event with its internal id
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+        - name: id
+          required: true
+          $ref: '#/components/parameters/CommonQueryId'
+      responses:
+        '200':
+          description: The requested event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResEvent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+    post:
+      x-angus-config:
+        - addEvent
+      tags:
+        - event
+        - create
+        - working
+      summary: Create an Event document
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqCreateEvent'
+      responses:
+        '200':
+          description: Event creation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+    patch:
+      x-angus-config:
+        - updateEvent
+      tags:
+        - event
+        - update
+        - WIP
+      summary: Update an Event document partially
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+        - name: id
+          required: true
+          $ref: '#/components/parameters/CommonQueryId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqUpdateEvent'
+      responses:
+        '200':
+          description: Event Update status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResUpdateEvent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /program:
+    get:
+      x-angus-config:
+        - getProgram
+      tags:
+        - program
+        - working
+      summary: Query a single program with its internal id
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+        - name: id
+          required: true
+          $ref: '#/components/parameters/CommonQueryId'
+      responses:
+        '200':
+          description: The requested program
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResProgram'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+    post:
+      x-angus-config:
+        - addProgram
+      tags:
+        - program
+        - create
+        - working
+      summary: Create a Program document
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqCreateProgram'
+      responses:
+        '200':
+          description: Program creation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+    patch:
+      x-angus-config:
+        - updateProgram
+      tags:
+        - program
+        - update
+        - WIP
+      summary: Update a Program document partially
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+        - name: id
+          required: true
+          $ref: '#/components/parameters/CommonQueryId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqUpdateProgram'
+      responses:
+        '200':
+          description: Program Update status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResUpdateProgram'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /order:
+    get:
+      x-angus-config:
+        - getOrder
+      tags:
+        - order
+        - working
+        - WIP
+      summary: Query a single order with its internal id
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+        - name: id
+          required: true
+          $ref: '#/components/parameters/CommonQueryId'
+      responses:
+        '200':
+          description: The requested order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResOrder'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+    post:
+      x-angus-config:
+        - addOrder
+      tags:
+        - order
+        - create
+        - WIP
+      summary: Create a Order document
+      parameters:
+        - $ref: '#/components/parameters/HeaderUserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqCreateOrder'
+      responses:
+        '200':
+          description: Order creation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /order/assign-to-me:
+    post:
+      x-angus-config:
+        - assignOrderToMe
+        - assignOrderToMeCheck
+      x-angus-custom-handler: order/assign-to-me
+      tags:
+        - order
+        - user
+        - mine
+        - working
+      summary: Assign the order to the authenticated user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqAssignOrder'
+      responses:
+        '200':
+          description: Order has been assigned to authenticated User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /gift-step/start-gifting:
+    post:
+      x-angus-config:
+        - startGifting
+        - startGiftingCheck
+      x-angus-custom-handler: gift-step/start-gifting
+      tags:
+        - ticket
+        - gift
+        - working
+      summary: Start a new gifting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqStartGifting'
+      responses:
+        '200':
+          description: Gifting started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResGiftUpdate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /gift-step/accept-gifting:
+    post:
+      x-angus-config:
+        - acceptGifting
+        - acceptGiftingCheck
+      x-angus-custom-handler: gift-step/accept-gifting
+      tags:
+        - ticket
+        - gift
+        - working
+      summary: Accept gifting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqGift'
+      responses:
+        '200':
+          description: The gift has been accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResGiftUpdate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /gift-step/reject-gifting:
+    post:
+      x-angus-config:
+        - rejectGifting
+        - rejectGiftingCheck
+      x-angus-custom-handler: gift-step/reject-gifting
+      tags:
+        - ticket
+        - gift
+        - working
+      summary: Reject gifting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqGift'
+      responses:
+        '200':
+          description: The gift has been rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResGiftUpdate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /gift-step/revoke-gifting:
+    post:
+      x-angus-config:
+        - revokeGifting
+        - revokeGiftingCheck
+      x-angus-custom-handler: gift-step/revoke-gifting
+      tags:
+        - ticket
+        - gift
+        - working
+      summary: Revoke gifting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqGift'
+      responses:
+        '200':
+          description: The gift has been revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResGiftUpdate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /gift-step/get-my-active-gifts:
+    get:
+      x-angus-custom-handler: gift-step/get-my-active-gifts
+      tags:
+        - gift
+        - list
+        - mine
+        - working
+      summary: List active giftings related to my account
+      responses:
+        '200':
+          description: Active giftings related to me
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mAppResGiftStepList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /user/register:
+    post:
+      x-angus-custom-handler: core/ok
+      tags:
+        - create
+        - user
+        - mine
+        - working
+      summary: Register the authenticated user into Angus
+      responses:
+        '200':
+          description: The registration has been successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /user/check-or-register:
+    post:
+      x-angus-custom-handler: core/ok
+      tags:
+        - create
+        - user
+        - mine
+        - working
+      summary: Check the user's existence in the Angus and register it if it is needed
+      responses:
+        '200':
+          description: The chek/registration has been successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /user/delete-profile:
+    post:
+      x-angus-custom-handler: user/delete-profile
+      tags:
+        - delete
+        - user
+        - mine
+        - WIP
+      summary: Check if the user's OWN profile can be deleted
+      responses:
+        '200':
+          description: The user's OWN profile can be deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /user/profile-deleted:
+    post:
+      x-angus-custom-handler: user/profile-deleted
+      tags:
+        - delete
+        - user
+        - mine
+        - WIP
+      summary: Firebase Auth profile has been deleted
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqProfileDeleted'
+      responses:
+        '200':
+          description: Firebase Auth profile has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+  /dev/seed-tickets:
+    post:
+      x-angus-config:
+        - addTicket
+        - addEvent
+        - addProgram
+        - addOrder
+      x-angus-custom-handler: dev/seed-tickets
+      tags:
+        - dev
+        - mine
+        - working
+      summary: Create tickets with realted Events and Programs for the authenticated user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mReqSeedTickets'
+      responses:
+        '200':
+          description: Created Tickets and related entities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mResStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '403':
+          $ref: '#/components/responses/AuthError'
+        '404':
+          $ref: '#/components/responses/FabricError'
+        '415':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        default:
+          $ref: '#/components/responses/InternalError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    tResponseHeader:
+      required:
+        - txId
+      properties:
+        txId:
+          type: string
+          description: Id of the transaction
+    statusType:
+      type: string
+      enum:
+        - OK
+        - WARNING
+        - ERROR
+    eFabricStatus:
+      type: object
+      description: Represents the status of the network components
+      properties:
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/statusType'
+        version:
+          type: string
+        channel:
+          type: string
+    mResHealthcheck:
+      type: object
+      description: Angus Gateway and installed chaincodes information.
+      required:
+        - gateway
+        - chaincode
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        gateway:
+          type: object
+          properties:
+            name:
+              type: string
+            status:
+              $ref: '#/components/schemas/statusType'
+            version:
+              type: string
+        chaincode:
+          type: array
+          items:
+            $ref: '#/components/schemas/eFabricStatus'
+    AngusError:
+      type: object
+      required:
+        - name
+        - status
+        - messageCode
+        - timestamp
+      properties:
+        status:
+          type: integer
+        name:
+          type: string
+        message:
+          type: string
+        messageCode:
+          type: string
+        label:
+          type: string
+        code:
+          type: string
+        stack:
+          type: string
+        timestamp:
+          type: number
+    MetadataItem:
+      title: MetadataItem
+      x-stoplight:
+        id: 39qiqc5bufhwy
+      type: object
+      description: Metadata record, without strict usage.
+      properties:
+        name:
+          type: string
+          description: Name of the metadata
+        value:
+          type: string
+          description: Value of the metadata
+    Interval:
+      title: Interval
+      x-stoplight:
+        id: kci21veyeop9l
+      type: object
+      description: Represents a time interval. You can omit the fromTime, toTime attributes if you want to set it on daily basis.
+      properties:
+        fromDate:
+          type: string
+          format: date
+          description: Starting date
+        fromTime:
+          type:
+            - string
+            - 'null'
+          format: time
+          description: Starting time
+        toDate:
+          type: string
+          format: date
+          description: Ending date
+        toTime:
+          type:
+            - string
+            - 'null'
+          format: time
+          description: Ending time
+    GeoLocation:
+      title: GeoLocation
+      x-stoplight:
+        id: fwnyytzw0uaqq
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: Longitude information
+        latitude:
+          type: number
+          format: double
+          description: Latitude information
+        range:
+          type:
+            - integer
+            - 'null'
+          description: The radius of the location in m
+      description: Describes a geographical location. If you omit the range attribute, it represents a point, otherwise it is an circle-shaped area, with range radius.
+    Validity:
+      title: Validity
+      x-stoplight:
+        id: t65xkh40y2dpe
+      x-tags:
+        - validity
+      type: object
+      description: This is a component, describes the validity of an entity
+      properties:
+        dateTime:
+          $ref: '#/components/schemas/Interval'
+        geoLocation:
+          $ref: '#/components/schemas/GeoLocation'
+    Seat:
+      title: Seat
+      x-stoplight:
+        id: o8red8w1k6u14
+      type: object
+      description: 'This component describes the seat selection. The attributes can be specific for the appropriate event/program, and can be null. Ex: section01-sector, section02-tribune, section03-06-null.'
+      properties:
+        section01:
+          type:
+            - string
+            - 'null'
+        section02:
+          type:
+            - string
+            - 'null'
+        section03:
+          type:
+            - string
+            - 'null'
+        section04:
+          type:
+            - string
+            - 'null'
+        section05:
+          type:
+            - string
+            - 'null'
+        section06:
+          type:
+            - string
+            - 'null'
+        row:
+          type:
+            - string
+            - 'null'
+        seat:
+          type:
+            - string
+            - 'null'
+    Pricing:
+      title: Pricing
+      x-stoplight:
+        id: a3neiywf6kkj0
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency name
+        price:
+          type: number
+          format: float
+          description: Price of the ticket
+      description: Ticket price stuff.
+    NftInfo:
+      title: NftInfo
+      x-stoplight:
+        id: r3cr0ax4su19v
+      type: object
+      properties:
+        nftId:
+          type: string
+        docType:
+          type: string
+        status:
+          type: string
+        name:
+          type: string
+        symbol:
+          type: string
+        itemImage:
+          type: string
+        price:
+          $ref: '#/components/schemas/Pricing'
+        AESKey:
+          type: string
+        timestamp:
+          type: string
+        chaincodeId:
+          type: string
+      description: NFT-related attributes.
+    TicketStatus:
+      title: TicketStatus
+      x-stoplight:
+        id: 4cn2y8aknheft
+      type: string
+      description: Status types of a Ticket
+      enum:
+        - UNFULFILLED
+        - FULFILLED
+        - ALLOCATING
+        - ALLOCATED
+        - VALID
+        - CANCELLED
+    BaseTicket:
+      title: Ticket
+      x-stoplight:
+        id: yscnomo0cg236
+      type: object
+      x-internal: true
+      description: This model represents the participation right/ticket on a specific event.
+      properties:
+        ticketId:
+          type: string
+          description: Id of the Ticket used by the DLT
+        externalTicketId:
+          type: string
+          description: Id of the Ticket used by the provider
+        orderId:
+          type: string
+          description: ID of the ostermann order
+        eventId:
+          type: string
+        programIds:
+          type: array
+          description: Contains the programs where the ticket is valid. If it is null, it has been defined, it is valid for all the Programs on the Event.
+          items:
+            type: string
+        ownerId:
+          type: string
+          description: The ID of the ticket owner
+        referenceTicketId:
+          type:
+            - string
+            - 'null'
+          description: It may reference to another ticket (like season pass-ticket conversion)
+        metadata:
+          type: array
+          description: Arbitrary metadata information
+          items:
+            $ref: '#/components/schemas/MetadataItem'
+        type:
+          type: string
+          description: Type/name of the ticket
+        validity:
+          $ref: '#/components/schemas/Validity'
+          description: The validity of the ticket. It may override the validity information in the Program entity
+        place:
+          $ref: '#/components/schemas/Seat'
+        price:
+          $ref: '#/components/schemas/Pricing'
+        nftInfo:
+          $ref: '#/components/schemas/NftInfo'
+        avail:
+          type: integer
+          description: Administers the available usage of the ticket, how many usages are left. If we set it to -1, it is unlimited (season pass), otherwise the Access Controller decreases it.
+          default: 1
+          format: int32
+          minimum: -1
+        ticketCode:
+          type:
+            - string
+            - 'null'
+          description: The valid ticket code to be provided as QR code
+        status:
+          $ref: '#/components/schemas/TicketStatus'
+          description: Status of the ticket
+    eTicket:
+      allOf:
+        - $ref: '#/components/schemas/BaseTicket'
+          required:
+            - ticketId
+            - orderId
+            - eventId
+            - avail
+            - status
+    mResTicket:
+      type: object
+      description: Ticket response
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        ticket:
+          $ref: '#/components/schemas/eTicket'
+    createTicket:
+      allOf:
+        - $ref: '#/components/schemas/BaseTicket'
+          required:
+            - orderId
+            - eventId
+            - avail
+            - status
+    mReqCreateTicket:
+      type: object
+      description: Payload to create a Ticket
+      required:
+        - ticket
+      properties:
+        ticket:
+          $ref: '#/components/schemas/createTicket'
+    tStatus:
+      properties:
+        code:
+          $ref: '#/components/schemas/statusType'
+        message:
+          type: string
+        messageCode:
+          type: string
+    ticketUpdateInfo:
+      type: object
+      description: Information about the ticket update process, updated fields etc.
+      properties:
+        statusUpdate:
+          type: boolean
+        newStatus:
+          $ref: '#/components/schemas/TicketStatus'
+    mResUpdateTicket:
+      type: object
+      description: Response of a Ticket update request
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        status:
+          $ref: '#/components/schemas/tStatus'
+        ticket:
+          $ref: '#/components/schemas/eTicket'
+        updateInfo:
+          $ref: '#/components/schemas/ticketUpdateInfo'
+      required:
+        - header
+        - status
+        - ticket
+        - updateInfo
+    TicketStatusGroup:
+      title: TicketStatusGroup
+      x-stoplight:
+        id: 9nd9rgrb76ef7
+      type: string
+      description: Normalized, grouped Status types of a Ticket
+      enum:
+        - INITIALIZED
+        - VALID
+        - USED
+    appTicket:
+      allOf:
+        - $ref: '#/components/schemas/eTicket'
+        - type: object
+          properties:
+            statusGroup:
+              $ref: '#/components/schemas/TicketStatusGroup'
+          required:
+            - statusGroup
+    Event:
+      title: Event
+      x-stoplight:
+        id: mj5ywkpptd4om
+      type: object
+      description: This entity represents the event itself
+      properties:
+        eventId:
+          type: string
+          description: The ID of the Event used by the DLT
+        externalEventId:
+          type: string
+          description: The ID of the Event used by the provider
+        name:
+          type: string
+          description: Name of the event, should be label
+        description:
+          type: string
+          description: Description of the event, should be label
+        dateOfEvent:
+          $ref: '#/components/schemas/Interval'
+        locationOfEvent:
+          type: array
+          description: Location of the event. Describes the geographical location of the event. It could contain 1 (location) or more than 2 (shape) elements
+          items:
+            $ref: '#/components/schemas/GeoLocation'
+    eEvent:
+      allOf:
+        - $ref: '#/components/schemas/Event'
+          required:
+            - eventId
+    Program:
+      title: Program
+      x-stoplight:
+        id: nuuu0ezr6zzog
+      type: object
+      description: 'This entity represents the individual program during an event. '
+      properties:
+        programId:
+          type: string
+          description: ID of the program
+        externalProgramId:
+          type: string
+          description: The ID of the program used by the provider
+        eventId:
+          type: string
+          description: ID of the corresponding Event
+        name:
+          type: string
+          description: Program name, should be label
+        description:
+          type: string
+          description: Program description, should be label
+        numOfTickets:
+          type: integer
+        dateOfProgram:
+          $ref: '#/components/schemas/Interval'
+        locationOfProgram:
+          description: Describes the geographical location of the program. It could contain 1 (location) or more than 2 (shape) elements.
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoLocation'
+    eProgram:
+      allOf:
+        - $ref: '#/components/schemas/Program'
+          required:
+            - programId
+            - eventId
+    OrderStatus:
+      title: OrderStatus
+      x-stoplight:
+        id: kjr0nraervkmg
+      type: string
+      description: Status types of an order
+      enum:
+        - UNKNOWN
+    Order:
+      title: Order
+      x-stoplight:
+        id: 41qsci4dgghyb
+      type: object
+      description: This model represents the order of a user.
+      properties:
+        orderId:
+          type: string
+          description: Id of the order
+        externalOrderId:
+          type: string
+          description: Id of the order
+        ownerId:
+          type: string
+          description: Owner userId of the order
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+          description: Status of the order
+      required:
+        - orderId
+        - status
+    eOrder:
+      allOf:
+        - $ref: '#/components/schemas/Order'
+    mAppResTicket:
+      type: object
+      description: Ticket response with resolved Order, Event and Program(s) entities
+      properties:
+        ticket:
+          $ref: '#/components/schemas/appTicket'
+        event:
+          $ref: '#/components/schemas/eEvent'
+        programs:
+          type: array
+          items:
+            $ref: '#/components/schemas/eProgram'
+        order:
+          $ref: '#/components/schemas/eOrder'
+      required:
+        - ticket
+        - event
+    mAppResTicketList:
+      type: object
+      description: Ticket list response for the application
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/mAppResTicket'
+      required:
+        - tickets
+    mResEvent:
+      type: object
+      description: Event response
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        event:
+          $ref: '#/components/schemas/eEvent'
+    createEvent:
+      allOf:
+        - $ref: '#/components/schemas/Event'
+    mReqCreateEvent:
+      type: object
+      description: Payload to create a Event
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/createEvent'
+    mResStatus:
+      type: object
+      description: Generic status
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        status:
+          $ref: '#/components/schemas/tStatus'
+    mReqUpdateEvent:
+      type: object
+      description: Payload to update an Event.
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/Event'
+    mResUpdateEvent:
+      type: object
+      description: Response of an Event update request
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        status:
+          $ref: '#/components/schemas/tStatus'
+        event:
+          $ref: '#/components/schemas/eEvent'
+      required:
+        - header
+        - status
+        - event
+    mResProgram:
+      type: object
+      description: Program response
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        program:
+          $ref: '#/components/schemas/eProgram'
+    createProgram:
+      allOf:
+        - $ref: '#/components/schemas/Program'
+          required:
+            - eventId
+    mReqCreateProgram:
+      type: object
+      description: Payload to create a Program
+      required:
+        - program
+      properties:
+        program:
+          $ref: '#/components/schemas/createProgram'
+    mReqUpdateProgram:
+      type: object
+      description: Payload to update an Program.
+      required:
+        - program
+      properties:
+        program:
+          $ref: '#/components/schemas/Program'
+    mResUpdateProgram:
+      type: object
+      description: Response of an Program update request
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        status:
+          $ref: '#/components/schemas/tStatus'
+        program:
+          $ref: '#/components/schemas/eProgram'
+      required:
+        - header
+        - status
+        - program
+    mResOrder:
+      type: object
+      description: Order response
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        order:
+          $ref: '#/components/schemas/eOrder'
+    mReqCreateOrder:
+      type: object
+      description: Payload to create a Order
+      required:
+        - order
+      properties:
+        order:
+          $ref: '#/components/schemas/eOrder'
+    mReqAssignOrder:
+      type: object
+      description: Payload to create a Ticket
+      required:
+        - orderId
+      properties:
+        orderId:
+          type: string
+          description: Id of the order
+    mReqStartGifting:
+      type: object
+      description: Payload to gift a ticket
+      properties:
+        gift:
+          type: object
+          properties:
+            ticketId:
+              type: string
+            recipientId:
+              type: string
+          required:
+            - ticketId
+            - recipientId
+      required:
+        - gift
+    GiftStatus:
+      title: GiftStatus
+      x-stoplight:
+        id: 82dami1603bys
+      type: string
+      description: Status types of a Gift
+      enum:
+        - PENDING
+        - ACCEPTED
+        - REVOKED
+        - REJECTED
+    Gift:
+      title: Gift
+      x-stoplight:
+        id: vmbargd7pgnox
+      type: object
+      description: This model represents the gift of a ticket from a user to another user.
+      properties:
+        giftId:
+          type: string
+          description: The ID of the Gift
+        ticketId:
+          description: The ID of the Ticket selected for gifting
+          type: string
+        senderId:
+          type: string
+          description: The ID of the Gift sender
+        recipientId:
+          type: string
+          description: The ID of the Gift recipient
+        status:
+          $ref: '#/components/schemas/GiftStatus'
+          description: The status of the Gift
+        dateSent:
+          type: integer
+          format: unix-time
+          description: The time the Gift was sent
+      required:
+        - giftId
+        - ticketId
+        - senderId
+        - recipientId
+        - status
+        - dateSent
+    eGift:
+      allOf:
+        - $ref: '#/components/schemas/Gift'
+    mResGiftUpdate:
+      type: object
+      description: Response of a gift update request
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        status:
+          $ref: '#/components/schemas/tStatus'
+        gift:
+          $ref: '#/components/schemas/eGift'
+      required:
+        - header
+        - status
+        - gift
+    mReqGift:
+      type: object
+      description: Payload for a gift
+      properties:
+        gift:
+          type: object
+          properties:
+            giftId:
+              type: string
+          required:
+            - giftId
+      required:
+        - gift
+    GiftStepStatus:
+      title: GiftStepStatus
+      x-stoplight:
+        id: kvnpfos7jz318
+      type: string
+      enum:
+        - PENDING
+        - SENT
+        - RECEIVED
+        - DECLINED
+        - REJECTED
+      description: Status types of a Gift Step
+    GiftStep:
+      title: GiftStep
+      x-stoplight:
+        id: p4fvwi6449moh
+      type: object
+      description: This model represents a step in a gift's lifecycle
+      properties:
+        giftStepId:
+          type: string
+          description: The ID of the Gift Step
+        giftId:
+          type: string
+          description: The ID of the Gift
+        actor:
+          type: string
+          description: The ID of the user performing a Gift Step
+        status:
+          $ref: '#/components/schemas/GiftStepStatus'
+          description: The status of the Gift Step
+        dateProcessed:
+          type: integer
+          description: The time the Gift Step was processed
+          format: unix-time
+      required:
+        - giftStepId
+        - giftId
+        - actor
+        - status
+        - dateProcessed
+    eGiftStep:
+      allOf:
+        - $ref: '#/components/schemas/GiftStep'
+    mAppResGiftStep:
+      type: object
+      description: Gift response with resolved GiftStep and Ticket entities
+      properties:
+        gift:
+          $ref: '#/components/schemas/eGift'
+        giftStep:
+          $ref: '#/components/schemas/eGiftStep'
+        ticket:
+          $ref: '#/components/schemas/eTicket'
+      required:
+        - gift
+        - giftStep
+        - ticket
+    mAppResGiftStepList:
+      type: object
+      description: GiftStep list response for the application
+      properties:
+        header:
+          $ref: '#/components/schemas/tResponseHeader'
+        gifts:
+          type: array
+          items:
+            $ref: '#/components/schemas/mAppResGiftStep'
+      required:
+        - gifts
+    mReqProfileDeleted:
+      type: object
+      description: Payload of profile deletion
+      properties:
+        userId:
+          type: string
+          description: Id of the deleted user
+      required:
+        - userId
+    mReqSeedTickets:
+      type: object
+      description: Payload to seed Tickets and related entities
+      properties:
+        prefix:
+          type: string
+          description: Prefix for created entity IDs
+  responses:
+    BadRequest:
+      description: Parameters are missing or in bad format
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AngusError'
+    AuthError:
+      description: Error in Angus
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AngusError'
+    InternalError:
+      description: Error in Angus
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AngusError'
+    FabricError:
+      description: Error in Fabric
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AngusError'
+  parameters:
+    HeaderUserId:
+      name: X-angus-Userid
+      in: header
+      required: true
+      schema:
+        type: string
+      example: client0
+      description: With activated authentication module this header is NOT needed. It will be replaced by the authenticator!
+    CommonQueryId:
+      name: id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Internal id of an Entity

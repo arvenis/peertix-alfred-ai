@@ -1,0 +1,43 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+build:
+  artifacts:
+    - image: peertix-alfred-ai
+      docker:
+        dockerfile: Dockerfile
+  tagPolicy:
+    envTemplate:
+      template: "asd"
+deploy:
+  helm:
+    releases:
+      - name: postgresql
+        remoteChart: oci://registry-1.docker.io/bitnamicharts/postgresql
+        namespace: flyte
+        createNamespace: true
+        setValues:
+          auth.username: postgres
+          auth.password: postgres
+          auth.database: flyte
+        wait: true
+      - name: minio
+        remoteChart: oci://registry-1.docker.io/bitnamicharts/minio
+        namespace: flyte
+        setValues:
+          auth.rootUser: minio
+          auth.rootPassword: miniostorage
+          defaultBuckets: flyte
+          # persistence.mountPath: "/data"
+        wait: true
+      - name: flyte-binary
+        remoteChart: flyteorg/flyte-binary
+        namespace: flyte
+        valuesFiles:
+          - values.yaml
+        wait: true
+      # - name: flyte
+      #   remoteChart: flyteorg/flyte-core
+      #   namespace: flyte
+      #   valuesFiles:
+      #     - core-values.yaml
+      #   wait: true

@@ -1,6 +1,6 @@
 artist_identifying_task:
   description: >
-    Retrieve the name of the artist from {event_name} event.
+    Retrieve the name of the artist from {topic} event.
   expected_output: >
     The name of the artist.
   agent: artist_identifying_agent

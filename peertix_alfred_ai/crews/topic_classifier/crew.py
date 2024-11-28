@@ -1,6 +1,10 @@
 from crewai import LLM, Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
 
 
 @CrewBase
@@ -16,7 +20,11 @@ class TopicClassifierCrew:
             config=self.agents_config["topic_classifier"],
             # tools=[MyCustomTool()], # Example of custom tool, loaded on the beginning of file
             tools=[SerperDevTool()],
-            llm=LLM(model="ollama/qwen2.5:14b", base_url="http://localhost:11434"),
+            # llm=LLM(model="ollama/qwen2.5:14b", base_url="http://localhost:11434"),
+            llm=LLM(
+                model="gemini/gemini-1.5-flash",
+                api_key=getenv("GEMINI_API_KEY"),
+            ),
             # llm=LLM(model="gpt-4"),
             verbose=True,
         )

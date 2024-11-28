@@ -6,9 +6,10 @@ authors = ["Medveczky Krisztián <krisz.medveczky@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<=3.13"
+python = ">=3.11,<3.13"
 crewai = "^0.76.2"
 crewai-tools = "^0.13.2"
+flytekit = "^1.13.13"
 
 
 [tool.poetry.scripts]

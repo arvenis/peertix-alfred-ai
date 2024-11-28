@@ -1,3 +1,4 @@
+from os import getenv
 from crewai import LLM, Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
@@ -17,7 +18,11 @@ class ArtistResearchCrew:
             config=self.agents_config["artist_identifying_agent"],
             # tools=[MyCustomTool()], # Example of custom tool, loaded on the beginning of file
             # tools=[SpotifyAPITool()],
-            llm=LLM(model="ollama/qwen2.5:14b", base_url="http://localhost:11434"),
+            # llm=LLM(model="ollama/qwen2.5:14b", base_url="http://localhost:11434"),
+            llm=LLM(
+                model="gemini/gemini-1.5-flash",
+                api_key=getenv("GEMINI_API_KEY"),
+            ),
             # llm=LLM(model="gpt-4"),
             verbose=True,
         )
@@ -28,7 +33,11 @@ class ArtistResearchCrew:
             config=self.agents_config["artist_research_agent"],
             # tools=[MyCustomTool()], # Example of custom tool, loaded on the beginning of file
             tools=[SpotifyAPITool()],
-            llm=LLM(model="ollama/qwen2.5:14b", base_url="http://localhost:11434"),
+            # llm=LLM(model="ollama/qwen2.5:14b", base_url="http://localhost:11434"),
+            llm=LLM(
+                model="gemini/gemini-1.5-flash",
+                api_key=getenv("GEMINI_API_KEY"),
+            ),
             # llm=LLM(model="gpt-4"),
             verbose=True,
         )
@@ -43,7 +52,7 @@ class ArtistResearchCrew:
     def artist_research_task(self) -> Task:
         return Task(
             config=self.tasks_config["artist_research_task"],
-            output_file="concert.md",
+            # output_file="concert.md",
         )
 
     @crew

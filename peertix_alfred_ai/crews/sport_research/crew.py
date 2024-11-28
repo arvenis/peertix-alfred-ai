@@ -1,3 +1,4 @@
+from os import getenv
 from crewai import LLM, Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
@@ -16,7 +17,11 @@ class SportResearchCrew:
             config=self.agents_config["sport_research_agent"],
             # tools=[MyCustomTool()], # Example of custom tool, loaded on the beginning of file
             tools=[SerperDevTool()],
-            llm=LLM(model="ollama/qwen2.5:14b", base_url="http://localhost:11434"),
+            # llm=LLM(model="ollama/qwen2.5:14b", base_url="http://localhost:11434"),
+            llm=LLM(
+                model="gemini/gemini-1.5-flash",
+                api_key=getenv("GEMINI_API_KEY"),
+            ),
             # llm=LLM(model="gpt-4"),
             verbose=True,
         )

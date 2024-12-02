@@ -1,0 +1,4 @@
+[flake8]
+; max-line-length = 118
+; 501 means DO not warn about the line-length problems
+extend-ignore = E501

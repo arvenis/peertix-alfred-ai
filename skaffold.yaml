@@ -7,7 +7,7 @@ build:
         dockerfile: Dockerfile
   tagPolicy:
     envTemplate:
-      template: "asd"
+      template: "dev"
 deploy:
   helm:
     releases:
@@ -29,15 +29,15 @@ deploy:
           defaultBuckets: flyte
           # persistence.mountPath: "/data"
         wait: true
-      - name: flyte-binary
-        remoteChart: flyteorg/flyte-binary
-        namespace: flyte
-        valuesFiles:
-          - values.yaml
-        wait: true
-      # - name: flyte
-      #   remoteChart: flyteorg/flyte-core
+      # - name: flyte-binary
+      #   remoteChart: flyteorg/flyte-binary
       #   namespace: flyte
       #   valuesFiles:
-      #     - core-values.yaml
+      #     - values.yaml
       #   wait: true
+      - name: flyte
+        remoteChart: flyteorg/flyte-core
+        namespace: flyte
+        valuesFiles:
+          - core-values.yaml
+        wait: true

@@ -1,0 +1,319 @@
+\n\n PREFERENCE LEVEL 3
+
+Here are some ticket examples, please make sure you fill the ticket, order, event and order data just like in these examples !
+
+Be prepared, that the externalOrderId will be harder to find since everyone uses something different, but follow the following guidelines for getting the externalOrderId:
+it could be just a number labeled as order, orderId, azonoító like this: 852903
+It could also include strings as well like R2807
+If it is labeled as R2807/1 and R2807/2, it means that they are part of the same order, with item 1 and item 1.
+
+Be prepared, that the ticket_type might be tricky to find since everyone uses something different, but follow the following guidelines for getting the ticket_type:
+It could be in the form of price type like normal, Belépőjegy, Normál elővételes, early bird, super early bird, general admission, VIP etc.
+
+```
+{
+  "ticket": {
+    "externalTicketId": "22219852903152",
+    "ownerId": "",
+    "metadata": [
+      {
+        "name": "location",
+        "value": "AGORA - Művelődési és Sportház"
+      }
+    ],
+    "validity": {
+      "dateTime": {
+        "fromDate": "2022-12-16",
+        "fromTime": "19:30:00.000Z",
+        "toDate": "2022-12-16",
+        "toTime": "23:59:00.000Z"
+      },
+      "geoLocation": {
+        "longitude": 16.623833,
+        "latitude": 47.217027,
+        "range": 40
+      }
+    },
+    "place": {
+      "section01": "",
+      "section02": "",
+      "section03": "",
+      "section04": "",
+      "section05": "",
+      "section06": "",
+      "row": "0",
+      "seat": "0"
+    },
+    "price": {
+      "currency": "HUF",
+      "price": 5000.0
+    },
+    "avail": 1,
+    "ticketCode": "22219852903152",
+    "status": "VALID",
+    "type": "general"
+  },
+  "event": {
+    "externalEventId": "",
+    "name": "Krúbi - 5 éves Krúbileum turné",
+    "description": "Terms and Conditions: By purchasing this ticket, the ticket holder accepts the Rules and Regulations of the event which can be found on the Promoters website or at the venue. Tickets are void if mutilated or damaged. Ticket counterfeiting is an offense under the Hungarian criminal law and will be prosecuted. Please note, if the event of an being cancelled or postponed, only the Event Promoter can be held responsible to declare the terms of ticket refunds. The Promoter reserves the right of any program changes.",
+    "dateOfEvent": {
+      "fromDate": "2022-12-16",
+      "fromTime": "19:30:00.000Z",
+      "toDate": "2022-12-16",
+      "toTime": "23:59:00.000Z"
+    },
+    "locationOfEvent": [
+      {
+        "longitude": 16.623833,
+        "latitude": 47.217027,
+        "range": 40
+      }
+    ]
+  },
+  "programs": [
+    {
+      "externalProgramId": "",
+      "name": "bongor",
+      "description": "",
+      "dateOfProgram": {
+        "fromDate": "2022-12-16",
+        "fromTime": "19:30:00.000Z",
+        "toDate": "2022-12-16",
+        "toTime": "21:00:00.000Z"
+      },
+      "locationOfProgram": [
+        {
+          "longitude": 16.623833,
+          "latitude": 47.217027,
+          "range": 40
+        }
+      ]
+    },
+    {
+      "externalProgramId": "",
+      "name": "Krúbi",
+      "description": "",
+      "dateOfProgram": {
+        "fromDate": "2022-12-16",
+        "fromTime": "21:00:00.000Z",
+        "toDate": "2022-12-16",
+        "toTime": "22:00:00.000Z"
+      },
+      "locationOfProgram": [
+        {
+          "longitude": 16.623833,
+          "latitude": 47.217027,
+          "range": 40
+        }
+      ]
+    }
+  ],
+  "order": {
+    "externalOrderId": "852903",
+    "status": "UNKNOWN"
+  }
+}
+
+{
+    "header": {
+        "txId": "string"
+    },
+    "processedTicket": {
+        "ticket": {
+            "externalTicketId": "lyxbocsjSBN6",
+            "ownerId": "",
+            "metadata": [
+                {
+                    "name": "location",
+                    "value": "Ápoló Klub"
+                }
+            ],
+            "validity": {
+                "dateTime": {
+                    "fromDate": "2024-07-26",
+                    "fromTime": "19:00:00.000Z",
+                    "toDate": "2024-07-26",
+                    "toTime": "22:00:00.000Z"
+                },
+                "geoLocation": {
+                    "longitude": 19.684896,
+                    "latitude": 46.922046,
+                    "range": 40
+                }
+            },
+            "place": {
+                "section01": "",
+                "section02": "",
+                "section03": "",
+                "section04": "",
+                "section05": "",
+                "section06": "",
+                "row": "0",
+                "seat": "0"
+            },
+            "price": {
+                "currency": "HUF",
+                "price": 6990
+            },
+            "avail": 1,
+            "ticketCode": "lyxbocsjSBN6",
+            "status": "VALID",
+            "type": "Normál elővételes"
+        },
+        "event": {
+            "externalEventId": "",
+            "name": "Blahalouisiana x Ivan & the Parazol",
+            "description": "",
+            "dateOfEvent": {
+                "fromDate": "2024-07-26",
+                "fromTime": "19:00:00.000Z",
+                "toDate": "2024-07-26",
+                "toTime": "22:00:00.000Z"
+            },
+            "locationOfEvent": [
+                {
+                    "longitude": 19.684896,
+                    "latitude": 46.922046,
+                    "range": 40
+                }
+            ]
+        },
+        "programs": [
+            {
+                "externalProgramId": "",
+                "name": "Blahalouisiana",
+                "description": "",
+                "dateOfProgram": {
+                    "fromDate": "2024-07-26",
+                    "fromTime": "19:00:00.000Z",
+                    "toDate": "2024-07-26",
+                    "toTime": "22:00:00.000Z"
+                },
+                "locationOfProgram": [
+                    {
+                        "longitude": 19.684896,
+                        "latitude": 46.922046,
+                        "range": 40
+                    }
+                ]
+            },
+            {
+                "externalProgramId": "",
+                "name": "Ivan & the Parazol",
+                "description": "",
+                "dateOfProgram": {
+                    "fromDate": "2024-07-26",
+                    "fromTime": "19:00:00.000Z",
+                    "toDate": "2024-07-26",
+                    "toTime": "22:00:00.000Z"
+                },
+                "locationOfProgram": [
+                    {
+                        "longitude": 19.684896,
+                        "latitude": 46.922046,
+                        "range": 40
+                    }
+                ]
+            }
+        ],
+        "order": {
+            "externalOrderId": "",
+            "status": "UNKNOWN"
+        }
+    }
+}
+
+{
+    "header": {
+        "txId": "string"
+    },
+    "processedTicket": {
+        "ticket": {
+            "externalTicketId": "GP8KQS5KSGA5ZOLJ",
+            "ownerId": "",
+            "metadata": [
+                {
+                    "name": "location",
+                    "value": "Akvárium Klub - NagyHall"
+                }
+            ],
+            "validity": {
+                "dateTime": {
+                    "fromDate": "2022-11-26",
+                    "fromTime": "23:30:00.000Z",
+                    "toDate": "2022-11-27",
+                    "toTime": "05:00:00.000Z"
+                },
+                "geoLocation": {
+                    "longitude": 19.046293,
+                    "latitude": 47.498552,
+                    "range": 40
+                }
+            },
+            "place": {
+                "section01": "",
+                "section02": "",
+                "section03": "",
+                "section04": "",
+                "section05": "",
+                "section06": "",
+                "row": "0",
+                "seat": "0"
+            },
+            "price": {
+                "currency": "HUF",
+                "price": 4500
+            },
+            "avail": 1,
+            "ticketCode": "GP8KQS5KSGA5ZOLJ",
+            "status": "VALID",
+            "type": "general"
+        },
+        "event": {
+            "externalEventId": "",
+            "name": "Necc Party",
+            "description": "A jegyhez kapcsolódó jogosultságokat csak és kizárólag a jegyen lévő kód testesíti meg. A jegy bemutatóra szól és nem nevesített. A belépésre jogosító karszalagot az Akvárium Klub annak adja ki, aki a jegyen szereplő kódot először bemutatja! Visszaélés (például a kóddal történt korábbi jogosulatlan belépés) esetén karszalagot vagy új jegyet az Akvárium Klub még a nyomtatott jegybirtokosának sem ad ki. A jegyen szereplő kód biztonságos és gondos őrzése a te felelősséged. Ne hagyd, hogy a jegyről vagy a kódról másolatot felvételt készítsenek. Az Akvárium Klub az esetleges visszaélésekért felelősséget nem vállal. A belépéskor az Akvárium a karszalagot a személyedhez rendeli, emiatt kérjük, hogy hozz magaddal fényképes személyazonosító igazolványt. Megkérünk minden koncertre látogatót, hogy ne vásároljon jegyet másodkézből. Az ellenőrizetlen forrásból származó jegyek eredetiségéért nem tudunk felelősséget vállalni. Az ellenőrzött forrásból származó jegyed képét ne tedd közzé semmilyen felületen és ne add ki kezedből.",
+            "dateOfEvent": {
+                "fromDate": "2022-11-26",
+                "fromTime": "23:30:00.000Z",
+                "toDate": "2022-11-27",
+                "toTime": "05:00:00.000Z"
+            },
+            "locationOfEvent": [
+                {
+                    "longitude": 19.046293,
+                    "latitude": 47.498552,
+                    "range": 40
+                }
+            ]
+        },
+        "programs": [
+            {
+                "externalProgramId": "",
+                "name": "Necc Party",
+                "description": "",
+                "dateOfProgram": {
+                    "fromDate": "2022-11-26",
+                    "fromTime": "23:30:00.000Z",
+                    "toDate": "2022-11-27",
+                    "toTime": "05:00:00.000Z"
+                },
+                "locationOfProgram": [
+                    {
+                        "longitude": 19.046293,
+                        "latitude": 47.498552,
+                        "range": 40
+                    }
+                ]
+            }
+        ],
+        "order": {
+            "externalOrderId": "",
+            "status": "UNKNOWN"
+        }
+    }
+}
+
+
+```

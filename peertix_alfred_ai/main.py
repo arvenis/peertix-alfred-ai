@@ -28,9 +28,7 @@ def main():
 
 def run_artist_research_crew():
     event_name = "Bladerunnaz pres. Audio - Ed Rush - Merikan - Pythius - Spor"
-    result: CrewOutput = (
-        ArtistResearchCrew().crew().kickoff(inputs={"event_name": event_name})
-    )
+    result: CrewOutput = ArtistResearchCrew().crew().kickoff(inputs={"event_name": event_name})
     print(result)
 
 
@@ -48,7 +46,5 @@ def run_sport_research_crew():
 
 def run_instagram_research_crew():
     product_desc = """"""
-    result: CrewOutput = (
-        SocialMediaMarketingCrew().crew().kickoff(inputs={"product_desc": product_desc})
-    )
+    result: CrewOutput = SocialMediaMarketingCrew().crew().kickoff(inputs={"product_desc": product_desc})
     print(result)

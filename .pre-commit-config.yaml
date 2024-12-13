@@ -1,7 +1,7 @@
 # Supported hooks
 # - https://pre-commit.com/hooks.html
 # - https://github.com/pre-commit/pre-commit-hooks/blob/main/README.md
-default_stages: [commit, push]
+default_stages: [pre-commit, pre-push]
 default_language_version:
   python: python3.11
 repos:

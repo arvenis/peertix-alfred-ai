@@ -9,10 +9,12 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 from peertix_alfred_ai.env import ENVS
 from peertix_alfred_ai.lib.utils import prompt_constructor
+import time
 
 
 @task(container_image="peertix-alfred-ai:dev", environment=ENVS)
-def process_ticket():
+def process_ticket() -> dict:
+    start_time = time.time()
     test_ticket_path = Path(__file__).parent.parent / "examples" / "test_ticket.jpeg"
     print(test_ticket_path)
     with open(test_ticket_path, "rb") as f:
@@ -20,7 +22,7 @@ def process_ticket():
 
     # Initialize Gemini model
     model = ChatGoogleGenerativeAI(
-        model="gemini-1.5-pro-002",
+        model="gemini-1.5-flash",
         max_output_tokens=2048,
         api_key=getenv("GEMINI_API_KEY"),
     )
@@ -67,6 +69,7 @@ def process_ticket():
         response = {"processedTicket": cleaned_obj}
 
         print(response)
+        print("--- %s seconds ---" % (time.time() - start_time))
         return response
 
     except json.JSONDecodeError as error:
@@ -75,5 +78,5 @@ def process_ticket():
 
 
 @workflow
-def process_ticket_wf():
+def process_ticket_wf() -> dict:
     return process_ticket()

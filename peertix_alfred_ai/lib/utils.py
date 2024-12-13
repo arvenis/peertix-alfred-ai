@@ -1,8 +1,6 @@
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
-# env = Environment(loader=PackageLoader("peertix_alfred_ai"), autoescape=select_autoescape())
-
 
 def get_rendered_template(templateFolder: str, templateName: str, templateData: any) -> str:  # type: ignore
     return (

@@ -6,10 +6,7 @@ from crewai_tools import BaseTool
 
 class SpotifyAPITool(BaseTool):
     name: str = "Spotify API Tool"
-    description: str = (
-        "This tool allows you to interact with the Spotify API and get "
-        "information about an artist."
-    )
+    description: str = "This tool allows you to interact with the Spotify API and get " "information about an artist."
 
     def get_spotify_access_token(self, client_id, client_secret):
         auth_url = "https://accounts.spotify.com/api/token"
@@ -63,14 +60,10 @@ class SpotifyAPITool(BaseTool):
         return artist_data
 
     def _run(self, artist_name: str) -> str:
-        token = self.get_spotify_access_token(
-            os.getenv("SPOTIFY_CLIENT_ID"), os.getenv("SPOTIFY_CLIENT_SECRET")
-        )
+        token = self.get_spotify_access_token(os.getenv("SPOTIFY_CLIENT_ID"), os.getenv("SPOTIFY_CLIENT_SECRET"))
 
         # Search for artist on Spotify
-        artist_id, name, followers, popularity = self.search_artist_on_spotify(
-            artist_name, token
-        )
+        artist_id, name, followers, popularity = self.search_artist_on_spotify(artist_name, token)
 
         # Fetch detailed artist info including monthly listeners
         artist_data = self.get_artist_listeners(artist_id, token)

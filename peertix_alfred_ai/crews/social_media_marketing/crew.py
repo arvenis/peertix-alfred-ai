@@ -1,25 +1,26 @@
 import os
-import uuid
-from crewai import LLM, Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, crew, task
 import secrets
 import string
+import uuid
 
-from peertix_alfred_ai.tools.instagram_tool import InstagramAPITool
-from peertix_alfred_ai.tools.spotify_tool import SpotifyAPITool
-
+from crewai import LLM, Agent, Crew, Process, Task
+from crewai.project import CrewBase, agent, crew, task
 
 # Check our tools documentations for more information on how to use them
-from crewai_tools import SerperDevTool
-from crewai_tools import ScrapeWebsiteTool
-from crewai_tools import TXTSearchTool
-from crewai_tools import YoutubeVideoSearchTool
-from crewai_tools import ScrapeElementFromWebsiteTool
-from crewai_tools import RagTool
-from crewai_tools import ScrapeWebsiteTool
-from crewai_tools import WebsiteSearchTool
-from crewai_tools import MDXSearchTool
+from crewai_tools import (
+    MDXSearchTool,
+    RagTool,
+    ScrapeElementFromWebsiteTool,
+    ScrapeWebsiteTool,
+    SerperDevTool,
+    TXTSearchTool,
+    WebsiteSearchTool,
+    YoutubeVideoSearchTool,
+)
 
+from peertix_alfred_ai.tools import InstagramAPITool
+
+# from peertix_alfred_ai.tools import SpotifyAPITool
 
 
 # Initialize Market Research Tool
@@ -37,6 +38,7 @@ rag_tool = RagTool()
 
 instagramAPITool = InstagramAPITool()
 
+
 @CrewBase
 class SocialMediaMarketingCrew:
     """Social Media Marketing crew"""
@@ -48,7 +50,7 @@ class SocialMediaMarketingCrew:
         # Define the characters to use in the hash (alphanumeric)
         characters = string.ascii_letters + string.digits
         # Generate a random hash of the specified length
-        hash_value = ''.join(secrets.choice(characters) for _ in range(length))
+        hash_value = "".join(secrets.choice(characters) for _ in range(length))
         return hash_value
 
     @agent
@@ -74,7 +76,7 @@ class SocialMediaMarketingCrew:
             llm=LLM(model="gpt-4o", api_key=os.getenv("OPENAI_API_KEY")),
             verbose=True,
         )
-    
+
     @agent
     def trend_analyst_agent(self) -> Agent:
         return Agent(
@@ -86,7 +88,7 @@ class SocialMediaMarketingCrew:
             # llm=LLM(model="gpt-4o", api_key=os.getenv("OPENAI_API_KEY")),
             verbose=True,
         )
-    
+
     @agent
     def chief_marketing_strategist_agent(self) -> Agent:
         return Agent(
@@ -107,9 +109,7 @@ class SocialMediaMarketingCrew:
 
     @task
     def competitor_researh_and_trend_identification_task(self) -> Task:
-        return Task(
-            config=self.tasks_config["competitor_researh_and_trend_identification_task"]
-        )
+        return Task(config=self.tasks_config["competitor_researh_and_trend_identification_task"])
 
     @task
     def social_media_content_creation_task(self) -> Task:
@@ -117,20 +117,17 @@ class SocialMediaMarketingCrew:
             config=self.tasks_config["social_media_content_creation_task"],
             output_file=f"results/marketing_posts_{uuid.uuid4().hex}.md",
         )
-    
+
     @task
     def keyword_and_hashtag_research_task(self) -> Task:
-        return Task(
-            config=self.tasks_config["keyword_and_hashtag_research_task"]
-        )
-    
+        return Task(config=self.tasks_config["keyword_and_hashtag_research_task"])
+
     @task
     def content_review_and_strategic_oversight_task(self) -> Task:
         return Task(
             config=self.tasks_config["content_review_and_strategic_oversight_task"],
             output_file=f"results/marketing_posts_{uuid.uuid4().hex}.md",
         )
-
 
     @crew
     def crew(self) -> Crew:

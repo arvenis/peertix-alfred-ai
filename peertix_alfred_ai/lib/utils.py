@@ -1,5 +1,11 @@
+import logging
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
+
+from peertix_alfred_ai.env import LOG_LEVEL
+
+logging.basicConfig(format="[%(asctime)s] [%(levelname)s] %(message)s", level=LOG_LEVEL)
+logger = logging.getLogger(__name__)
 
 
 def get_rendered_template(templateFolder: str, templateName: str, templateData: any) -> str:  # type: ignore

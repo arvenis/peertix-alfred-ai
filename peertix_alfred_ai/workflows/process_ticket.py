@@ -1,5 +1,6 @@
 import base64
 import json
+import time
 from os import getenv
 from pathlib import Path
 
@@ -8,16 +9,16 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from peertix_alfred_ai.env import ENVS
-from peertix_alfred_ai.lib.utils import prompt_constructor
+from peertix_alfred_ai.lib.utils import logger, prompt_constructor
 from peertix_alfred_ai.tasks.firestore_write import write_to_firestore
-import time
 
 
 @task(container_image="peertix-alfred-ai:dev", environment=ENVS)
 def process_ticket() -> dict:
     start_time = time.time()
+    logger.info("Starting ticket processing")
     test_ticket_path = Path(__file__).parent.parent / "examples" / "test_ticket.jpeg"
-    print(test_ticket_path)
+    logger.debug(test_ticket_path)
     with open(test_ticket_path, "rb") as f:
         scanned_ticket_image = base64.b64encode(f.read()).decode("utf-8")
 
@@ -60,6 +61,7 @@ def process_ticket() -> dict:
     ]
 
     # Invoke model
+    logger.info("Invoking Gemini model")
     result = model.invoke(messages)
 
     try:
@@ -69,8 +71,8 @@ def process_ticket() -> dict:
 
         response = {"processedTicket": cleaned_obj}
 
-        print(response)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        logger.debug("Processed ticket: {response}")
+        logger.info("--- FINISHED %s seconds ---" % (time.time() - start_time))
         return response
 
     except json.JSONDecodeError as error:
@@ -82,3 +84,6 @@ def process_ticket() -> dict:
 def process_ticket_wf() -> None:
     processed_ticket = process_ticket()
     write_to_firestore(collection="test_details", data=processed_ticket)
+
+    # *This would automatically start in parallel with the other write_to_firestore task :D
+    # write_to_firestore(collection="test_details", data=processed_ticket)

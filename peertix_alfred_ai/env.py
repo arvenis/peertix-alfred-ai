@@ -1,7 +1,10 @@
+import logging
 from os import getenv
 from dotenv import load_dotenv
 
 load_dotenv()
+
+LOG_LEVEL = getenv("LOG_LEVEL", logging.INFO)
 
 
 class FirebaseConfig:

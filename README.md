@@ -84,6 +84,12 @@ Now you should be able to run workflows on the Flyte cluster via the CLI
 pyflyte run --remote peertix_alfred_ai/workflows/process_ticket.py process_ticket_wf
 ```
 
+## Create a Flyte PeerTix project
+
+```shell
+flytectl create project --file flyte-project.yaml --domain development
+```
+
 ## Using requests to interact with the Flyte Admin API
 
 We need to use the HTTP Server of Flyte Admin API to communicate with the Flyte cluster.

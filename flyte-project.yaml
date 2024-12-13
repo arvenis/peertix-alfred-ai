@@ -1,0 +1,6 @@
+id: "peertix"
+name: "Peertix"
+labels:
+  values:
+    app: peertix
+description: "Peertix Alfred AI Orchestration."

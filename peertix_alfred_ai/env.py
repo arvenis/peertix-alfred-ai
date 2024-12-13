@@ -4,6 +4,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+class FirebaseConfig:
+    SECRET_GROUP = getenv("FIREBASE_SECRET_GROUP", "firebase-credentials")
+    SECRET_NAME = getenv("FIREBASE_SECRET_NAME", "firebase-credentials")
+
+
 ENVS = {
     "OPENAI_MODEL_NAME": getenv("OPENAI_MODEL_NAME"),
     "OPENAI_API_KEY": getenv("OPENAI_API_KEY"),

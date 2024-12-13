@@ -9,6 +9,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 from peertix_alfred_ai.env import ENVS
 from peertix_alfred_ai.lib.utils import prompt_constructor
+from peertix_alfred_ai.tasks.firestore_write import write_to_firestore
 import time
 
 
@@ -78,5 +79,6 @@ def process_ticket() -> dict:
 
 
 @workflow
-def process_ticket_wf() -> dict:
-    return process_ticket()
+def process_ticket_wf() -> None:
+    processed_ticket = process_ticket()
+    write_to_firestore(collection="test_details", data=processed_ticket)

@@ -1,0 +1,140 @@
+name: Build Peertix Alfred AI
+
+on:
+  push:
+    paths:
+      - "peertix_alfred_ai/**"
+
+env:
+  PROJECT_ID: angus-integration
+  IMAGE_NAME: europe-west1-docker.pkg.dev/angus-integration/angus-pt/pt-alfred-ai
+  PRIVATE_IMAGE_REPO_NAME: registry.angusnext.io/angus-pt/pt-alfred-ai
+  WORKLOAD_IDENTITY_PROVIDER: projects/266041010546/locations/global/workloadIdentityPools/github-actions/providers/github-actions
+  SERVICE_ACCOUNT: github-actions@angus-integration.iam.gserviceaccount.com
+  GITHUB_WORKFLOW_URL: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
+  USER_NAME: ${{ github.actor }}
+  CICD-IMAGE_URL: https://hooks.slack.com/services/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
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract branch tag
+        run: |
+          echo "BRANCH_TAG=$(echo ${{ github.ref }} | sed -e 's/.*\///g')" >> $GITHUB_ENV
+
+      - name: Extract short SHA
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - id: "auth"
+        name: Login to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v2"
+
+      - id: "secrets"
+        name: Acquire secret for private registry from GCP secret
+        uses: "google-github-actions/get-secretmanager-secrets@v2"
+        with:
+          secrets: |-
+            privateRegistryUserName:angus-integration/privateRegistryUserName
+            privateRegistryPassword:angus-integration/privateRegistryPassword
+
+      - name: "Docker auth"
+        run: |-
+          gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
+          echo ${{ steps.secrets.outputs.privateRegistryPassword }} | docker login registry.angusnext.io -u ${{ steps.secrets.outputs.privateRegistryUserName }} --password-stdin
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}
+            ${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
+            ${{ env.IMAGE_NAME }}:${{ github.run_number }}
+            ${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.BRANCH_TAG }}
+            ${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.SHORT_SHA }}
+            ${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ github.run_number }}
+
+      - name: Send success notification
+        if: success()
+        uses: tokorom/action-slack-incoming-webhook@main
+        env:
+          INCOMING_WEBHOOK_URL: ${{ env.CICD-IMAGE_URL }}
+        with:
+          text: Image *${{ env.IMAGE_NAME }}* and *${{ env.PRIVATE_IMAGE_REPO_NAME }}* has been created successfully.
+          attachments: |
+            [
+             {
+               "title": "Workflow information",
+               "title_link": "${{ env.GITHUB_WORKFLOW_URL }}",
+               "color": "good",
+               "fields":[
+                     {
+                       "title": "triggered by",
+                       "value": "${{ env.USER_NAME }}"
+                     },
+                    {
+                       "title":"Image names for gcp artifact repository",
+                       "value": "${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}\n${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}\n${{ env.IMAGE_NAME }}:${{ github.run_number }}"
+                    },
+                    {
+                       "title":"Image names for private docker registry",
+                       "value": "${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.BRANCH_TAG }}\n${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.SHORT_SHA }}\n${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ github.run_number }}"
+                    }
+               ],
+               "footer": "arvenis app"
+             }
+            ]
+
+      - name: Send failure notification
+        if: failure()
+        uses: tokorom/action-slack-incoming-webhook@main
+        env:
+          INCOMING_WEBHOOK_URL: ${{ env.CICD-IMAGE_URL	}}
+        with:
+          text: Image *${{ env.IMAGE_NAME }}* and *${{ env.PRIVATE_IMAGE_REPO_NAME }}* upload failed.
+          attachments: |
+            [
+             {
+               "title": "Workflow information",
+               "title_link": "${{ env.GITHUB_WORKFLOW_URL }}",
+               "color": "danger",
+               "fields":[
+                      {
+                       "title": "triggered by",
+                       "value": "${{ env.USER_NAME }}"
+                     },
+                     {
+                        "title":"Image names for gcp artifact repository",
+                        "value": "${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}\n${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}\n${{ env.IMAGE_NAME }}:${{ github.run_number }}"
+                     },
+                     {
+                        "title":"Image names for private docker registry",
+                        "value": "${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.BRANCH_TAG }}\n${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.SHORT_SHA }}\n${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ github.run_number }}"
+                     }
+               ],
+               "footer": "arvenis app"
+             }

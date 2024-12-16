@@ -15,7 +15,6 @@ env:
   SERVICE_ACCOUNT: github-actions@angus-integration.iam.gserviceaccount.com
   GITHUB_WORKFLOW_URL: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
   USER_NAME: ${{ github.actor }}
-  CICD-IMAGE_URL: https://hooks.slack.com/services/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
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -75,64 +74,3 @@ jobs:
             ${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}
             ${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
             ${{ env.IMAGE_NAME }}:${{ github.run_number }}
-
-      - name: Send success notification
-        if: success()
-        uses: tokorom/action-slack-incoming-webhook@main
-        env:
-          INCOMING_WEBHOOK_URL: ${{ env.CICD-IMAGE_URL }}
-        with:
-          text: Image *${{ env.IMAGE_NAME }}* and *${{ env.PRIVATE_IMAGE_REPO_NAME }}* has been created successfully.
-          attachments: |
-            [
-             {
-               "title": "Workflow information",
-               "title_link": "${{ env.GITHUB_WORKFLOW_URL }}",
-               "color": "good",
-               "fields":[
-                     {
-                       "title": "triggered by",
-                       "value": "${{ env.USER_NAME }}"
-                     },
-                    {
-                       "title":"Image names for gcp artifact repository",
-                       "value": "${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}\n${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}\n${{ env.IMAGE_NAME }}:${{ github.run_number }}"
-                    },
-                    {
-                       "title":"Image names for private docker registry",
-                       "value": "${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.BRANCH_TAG }}\n${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.SHORT_SHA }}\n${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ github.run_number }}"
-                    }
-               ],
-               "footer": "arvenis app"
-             }
-            ]
-
-      - name: Send failure notification
-        if: failure()
-        uses: tokorom/action-slack-incoming-webhook@main
-        env:
-          INCOMING_WEBHOOK_URL: ${{ env.CICD-IMAGE_URL	}}
-        with:
-          text: Image *${{ env.IMAGE_NAME }}* and *${{ env.PRIVATE_IMAGE_REPO_NAME }}* upload failed.
-          attachments: |
-            [
-             {
-               "title": "Workflow information",
-               "title_link": "${{ env.GITHUB_WORKFLOW_URL }}",
-               "color": "danger",
-               "fields":[
-                      {
-                       "title": "triggered by",
-                       "value": "${{ env.USER_NAME }}"
-                     },
-                     {
-                        "title":"Image names for gcp artifact repository",
-                        "value": "${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}\n${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}\n${{ env.IMAGE_NAME }}:${{ github.run_number }}"
-                     },
-                     {
-                        "title":"Image names for private docker registry",
-                        "value": "${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.BRANCH_TAG }}\n${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.SHORT_SHA }}\n${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ github.run_number }}"
-                     }
-               ],
-               "footer": "arvenis app"
-             }

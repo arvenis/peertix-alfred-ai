@@ -4,20 +4,11 @@ import firebase_admin
 import firebase_admin.db
 import firebase_admin.firestore
 from firebase_admin import credentials
-from flytekit import Secret, current_context, task
+from flytekit import task
 
-from peertix_alfred_ai.env import ENVS, FirebaseConfig
-from peertix_alfred_ai.lib.utils import logger
-
-# Define a secret for the firebase credentials
-# The secret should live inside the same namespace as the task
-# If the task runs in the project `peertix` and domain `development`
-# then the secret should be in the `peertix-development` namespace
-firebase_secret = Secret(
-    group=FirebaseConfig.SECRET_GROUP,
-    key=FirebaseConfig.SECRET_NAME,
-    mount_requirement=Secret.MountType.FILE,
-)
+from peertix_alfred_ai.env import ENVS, SecretConfig
+from peertix_alfred_ai.lib.utils import get_secret_file_path, logger
+from peertix_alfred_ai.lib.secrets import firebase_secret
 
 
 @task(
@@ -37,8 +28,7 @@ def write_to_firestore(collection: str, data: dict, id: str | None = None) -> st
     """
 
     # Get the Firabese secret from Flyte secret manager
-    secret_manager = current_context().secrets
-    credentials_file_path = secret_manager.get_secrets_file(FirebaseConfig.SECRET_GROUP, FirebaseConfig.SECRET_NAME)
+    credentials_file_path = get_secret_file_path(SecretConfig.FIREBASE)
 
     # Initialize Firebase
     cred = credentials.Certificate(credentials_file_path)

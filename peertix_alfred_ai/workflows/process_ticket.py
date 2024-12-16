@@ -1,19 +1,19 @@
 import base64
 import json
 import time
-from os import getenv
 from pathlib import Path
 
 from flytekit import task, workflow
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from peertix_alfred_ai.env import ENVS
-from peertix_alfred_ai.lib.utils import logger, prompt_constructor
+from peertix_alfred_ai.env import ENVS, IMAGE_NAME, SecretConfig
+from peertix_alfred_ai.lib.secrets import gemini_secret
+from peertix_alfred_ai.lib.utils import get_secret_value, logger, prompt_constructor
 from peertix_alfred_ai.tasks.firestore_write import write_to_firestore
 
 
-@task(container_image="peertix-alfred-ai:dev", environment=ENVS)
+@task(container_image=IMAGE_NAME, environment=ENVS, secret_requests=[gemini_secret])
 def process_ticket() -> dict:
     start_time = time.time()
     logger.info("Starting ticket processing")
@@ -22,11 +22,14 @@ def process_ticket() -> dict:
     with open(test_ticket_path, "rb") as f:
         scanned_ticket_image = base64.b64encode(f.read()).decode("utf-8")
 
+    # Get Gemini API key from Flyte secret manager
+    gemini_api_key = get_secret_value(SecretConfig.GEMINI)
+
     # Initialize Gemini model
     model = ChatGoogleGenerativeAI(
         model="gemini-1.5-flash",
         max_output_tokens=2048,
-        api_key=getenv("GEMINI_API_KEY"),
+        api_key=gemini_api_key,
     )
 
     # Read OpenAPI definition

@@ -7,9 +7,16 @@ load_dotenv()
 LOG_LEVEL = getenv("LOG_LEVEL", logging.INFO)
 
 
-class FirebaseConfig:
-    SECRET_GROUP = getenv("FIREBASE_SECRET_GROUP", "firebase-credentials")
-    SECRET_NAME = getenv("FIREBASE_SECRET_NAME", "firebase-credentials")
+IMAGE_NAME = getenv("IMAGE_NAME", "pt-alfred-ai:dev")
+
+
+class SecretConfig:
+    GROUP = getenv("SECRET_GROUP", "flyte-secrets")  # The name of the secret in the cluster
+    FIREBASE = getenv("FIREBASE_SECRET_NAME", "firebase-credentials")
+    SERPER = getenv("SERPER_SECRET_NAME", "serper-api-key")
+    SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID_SECRET_NAME", "spotify-client-id")
+    SPOTIFY_CLIENT_SECRET = getenv("SPOTIFY_CLIENT_SECRET_NAME", "spotify-client-secret")
+    GEMINI = getenv("GEMINI_SECRET_NAME", "gemini-api-key")
 
 
 ENVS = {

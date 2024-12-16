@@ -3,7 +3,9 @@ name: Build Peertix Alfred AI
 on:
   push:
     paths:
+      - "Dockerfile"
       - "peertix_alfred_ai/**"
+      - ".github/workflows/build-alfred-ai-image.yaml"
 
 env:
   PROJECT_ID: angus-integration
@@ -61,7 +63,6 @@ jobs:
       - name: "Docker auth"
         run: |-
           gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
-          echo ${{ steps.secrets.outputs.privateRegistryPassword }} | docker login registry.angusnext.io -u ${{ steps.secrets.outputs.privateRegistryUserName }} --password-stdin
 
       - name: Build and push by digest
         id: build
@@ -74,9 +75,6 @@ jobs:
             ${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}
             ${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
             ${{ env.IMAGE_NAME }}:${{ github.run_number }}
-            ${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.BRANCH_TAG }}
-            ${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ env.SHORT_SHA }}
-            ${{ env.PRIVATE_IMAGE_REPO_NAME }}:${{ github.run_number }}
 
       - name: Send success notification
         if: success()
